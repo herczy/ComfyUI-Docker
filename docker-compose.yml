@@ -5,7 +5,9 @@
 services:
   comfyk:
     build:
+      context: .
       dockerfile: Dockerfile
+
     image: comfyui:latest
     container_name: comfyui
 
@@ -19,7 +21,16 @@ services:
       - ./settings:/app/ComfyUI/user/default:rw
       - ./flows:/app/ComfyUI/user/default/workflows:rw
     
-    runtime: nvidia
+    # runtime: nvidia
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
 
