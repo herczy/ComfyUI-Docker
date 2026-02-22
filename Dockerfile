@@ -26,13 +26,6 @@ RUN apt-get update \
       fontconfig \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy and enable the startup script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Switch to non-root user
-USER $UID:$GID
-
 # make ~/.local/bin available on the PATH so scripts like tqdm, torchrun, etc. are found
 ENV PATH=/home/appuser/.local/bin:$PATH
 
@@ -48,12 +41,40 @@ WORKDIR /app/ComfyUI
 # Install ComfyUI dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY install-plugin.sh /app
+RUN chmod +x /app/install-plugin.sh
+
+RUN mkdir -p /app/ComfyUI/custom_nodes
+RUN /app/install-plugin.sh https://github.com/ltdrdata/ComfyUI-Manager.git ComfyUI-Manager
+RUN /app/install-plugin.sh https://github.com/cubiq/ComfyUI_essentials.git ComfyUI_essentials
+RUN /app/install-plugin.sh https://github.com/crystian/ComfyUI-Crystools.git ComfyUI-Crystools
+RUN /app/install-plugin.sh https://github.com/rgthree/rgthree-comfy.git rgthree-comfy
+RUN /app/install-plugin.sh https://github.com/kijai/ComfyUI-KJNodes.git ComfyUI-KJNodes
+RUN /app/install-plugin.sh https://github.com/ssitu/ComfyUI_UltimateSDUpscale.git ComfyUI_UltimateSDUpscale
+RUN /app/install-plugin.sh https://github.com/Acly/comfyui-inpaint-nodes comfyui-inpaint-nodes
+RUN /app/install-plugin.sh https://github.com/cubiq/ComfyUI_IPAdapter_plus comfyui_ipadapter_plus
+RUN /app/install-plugin.sh https://github.com/1038lab/ComfyUI-JoyCaption/ ComfyUI-JoyCaption
+RUN /app/install-plugin.sh https://github.com/un-seen/comfyui_segment_anything_plus comfyui_segment_anything_plus
+RUN /app/install-plugin.sh https://github.com/pythongosssss/ComfyUI-WD14-Tagger comfyui-wd14-tagger
+
+# Manual fixes for not working custom nodes
+RUN pip install -U transformers==4.37 sentence-transformers==2.7.0
+
 # (Optional) Clean up pip cache to reduce image size
 RUN pip cache purge
 
 # Expose the port that ComfyUI will use (change if needed)
 EXPOSE 8188
 
+# Copy and enable the startup script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+RUN mkdir -p /app/ComfyUI/user /app/ComfyUI/user/default
+RUN chown -R $UID:$GID /app
+
+# Switch to non-root user
+USER $UID:$GID
+
 # Run entrypoint first, then start ComfyUI
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python","/app/ComfyUI/main.py","--listen","0.0.0.0"]
+CMD ["python", "/app/ComfyUI/main.py", "--listen", "0.0.0.0"]
