@@ -77,4 +77,4 @@ USER $UID:$GID
 
 # Run entrypoint first, then start ComfyUI
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python", "/app/ComfyUI/main.py", "--listen", "0.0.0.0"]
+CMD ["python", "/app/ComfyUI/main.py", "--listen", "0.0.0.0", "--lowvram"]

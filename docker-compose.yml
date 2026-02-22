@@ -21,8 +21,6 @@ services:
       - ./settings:/app/ComfyUI/user/default:rw
       - ./flows:/app/ComfyUI/user/default/workflows:rw
     
-    # runtime: nvidia
-
     deploy:
       resources:
         reservations:
