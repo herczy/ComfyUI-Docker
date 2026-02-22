@@ -2,7 +2,7 @@
 
 set -e
 
-CFG_DIR="/app/ComfyUI/user/default/ComfyUI-Manager"
+CFG_DIR="/workspace/ComfyUI/user/default/ComfyUI-Manager"
 CFG_FILE="$CFG_DIR/config.ini"
 DB_DIR="$CFG_DIR"
 DB_PATH="${DB_DIR}/manager.db"
@@ -46,7 +46,7 @@ fi
 # Add WD14 models directory
 cd custom_nodes/comfyui-wd14-tagger
 rm -rf models
-ln -s /app/ComfyUI/models/comfyui-wd14-tagger models
+ln -s /workspace/ComfyUI/models/comfyui-wd14-tagger models
 
 echo "↳ Launching ComfyUI"
 exec "$@"
