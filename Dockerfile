@@ -5,15 +5,9 @@
 # Use a minimal Python base image (adjust version as needed)
 FROM python:3.12-slim-bookworm
 
-# Allow passing in your host UID/GID (defaults 1000:1000)
-ARG UID=1000
-ARG GID=1000
-
 # Install OS deps and create the non-root user
 RUN apt-get update \
  && apt-get install -y --no-install-recommends git \
- && groupadd --gid ${GID} appuser \
- && useradd --uid ${UID} --gid ${GID} --create-home --shell /bin/bash appuser \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Mesa/GL and GLib so OpenCV can load libGL.so.1 for ComfyUI-VideoHelperSuite
@@ -65,11 +59,7 @@ EXPOSE 8188
 # Copy and enable the startup script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh \
- && mkdir -p /app/ComfyUI/user /app/ComfyUI/user/default \
- && chown -R $UID:$GID /app
-
-# Switch to non-root user
-USER $UID:$GID
+ && mkdir -p /app/ComfyUI/user /app/ComfyUI/user/default
 
 # Run entrypoint first, then start ComfyUI
 ENTRYPOINT ["/entrypoint.sh"]
