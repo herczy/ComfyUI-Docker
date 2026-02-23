@@ -4,15 +4,11 @@
 
 services:
   comfyk:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-    image: comfyui:latest
+    image: herczy/comfyui:v260223
     container_name: comfyui
 
     ports:
-      - "8188:8188"
+      - "8080:8188"
 
     volumes:
       - ./models:/app/ComfyUI/models:rw
