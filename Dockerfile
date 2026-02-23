@@ -63,4 +63,4 @@ RUN chmod +x /entrypoint.sh \
 
 # Run entrypoint first, then start ComfyUI
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python", "/app/ComfyUI/main.py", "--listen", "0.0.0.0", "--lowvram"]
+CMD ["python", "/app/ComfyUI/main.py", "--listen", "0.0.0.0"]
