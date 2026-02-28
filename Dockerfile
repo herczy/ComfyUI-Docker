@@ -56,6 +56,8 @@ RUN mkdir -p /app/ComfyUI/custom_nodes \
  && /app/install-plugin.sh https://github.com/1038lab/ComfyUI-JoyCaption/ ComfyUI-JoyCaption \
  && /app/install-plugin.sh https://github.com/un-seen/comfyui_segment_anything_plus comfyui_segment_anything_plus \
  && /app/install-plugin.sh https://github.com/pythongosssss/ComfyUI-WD14-Tagger comfyui-wd14-tagger \
+ && /app/install-plugin.sh https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite ComfyUI-VideoHelperSuite \
+ && /app/install-plugin.sh https://github.com/city96/ComfyUI-GGUF ComfyUI-GGUF \
  && pip uninstall -y transformers && pip install -U transformers==4.37 sentence-transformers==2.7.0 \
  && pip cache purge
 
